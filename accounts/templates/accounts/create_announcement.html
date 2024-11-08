@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create announcement</title>
+</head>
+    <body>
+        <h2>Create Announcement</h2>
+        <form method="post" enctype="multipart/form-data" class="announcement-form">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="submit-button">Create Announcement</button>
+        </form>
+        
+        <style>
+            .announcement-form {
+                max-width: 600px;
+                margin: 0 auto;
+                padding: 20px;
+                border: 1px solid #ccc;
+                border-radius: 10px;
+                background-color: #f9f9f9;
+            }
+            .announcement-form label {
+                font-weight: bold;
+                display: block;
+                margin-bottom: 5px;
+                color: #333;
+            }
+            .announcement-form input[type="text"],
+            .announcement-form textarea,
+            .announcement-form input[type="file"] {
+                width: 100%;
+                padding: 10px;
+                margin-bottom: 15px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                font-size: 14px;
+            }
+            .announcement-form textarea {
+                height: 100px;
+                resize: vertical;
+            }
+            .submit-button {
+                background-color: #a42eff;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                font-size: 16px;
+                cursor: pointer;
+                border-radius: 5px;
+                transition: background-color 0.3s ease;
+            }
+            .submit-button:hover {
+                background-color: #8b24cc;
+            }
+        </style>
+    </body>
+</html>

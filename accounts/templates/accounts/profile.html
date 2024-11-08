@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ user.username }} profile</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #1d1f27; /* Dark theme background */
+            color: #e6e6e6; /* Light text */
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Container */
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #2e2f38; /* Dark container */
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            overflow: hidden;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Cover Photo */
+        .cover-photo {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            box-shadow: 0px 0px 33px 3px rgba(119,46,255,0.5);
+        }
+
+        /* Profile Section */
+        .profile-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            margin-top: -75px;
+            flex-wrap: wrap; /* Mobile responsiveness */
+        }
+
+        .profile-pic {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 5px solid #3e206d; /* Cyber purple border */
+            object-fit: cover;
+            box-shadow: 0px 0px 33px 3px rgba(119,46,255,0.5);
+        }
+
+        /* User Details Styling */
+        .user-details {
+            flex-grow: 1;
+            margin-left: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .user-details h2 {
+            margin: 0;
+            font-size: 2rem;
+            color: #e6e6e6;
+            font-weight: bold;
+        }
+
+        .user-details p {
+            color: #bbb;
+            margin-top: 5px;
+            font-size: 1rem;
+        }
+
+        .bio {
+            padding: 20px;
+            background-color: #3b3e47;
+            border-top: 1px solid #555;
+            margin-top: 20px;
+            font-size: 1rem;
+        }
+
+        /* Buttons */
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .theme-button, .edit-button {
+            background-color: #1d1f27;
+            color: #fff;
+            border: 0.5px solid #7432df;
+            padding: 8px 16px;
+            border-radius: 1px;
+            cursor: pointer;
+            font-family: 'Roboto', 'Helvetica Neue', 'Arial', sans-serif;
+            font-weight: 600; /* Maximum weight */
+            font-size: 0.9rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .theme-button:hover, .edit-button:hover {
+            background-color: #7432df;
+        }
+
+        /* Posts Section */
+        .posts {
+            padding: 20px;
+        }
+
+        .post {
+            background-color: #3b3e47;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+
+        .post .post-title {
+            color: #8f42f5;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .post-content {
+            color: #ccc;
+            margin-bottom: 15px;
+        }
+
+        /* Light Theme */
+        .light-theme {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
+        .light-theme .container {
+            background-color: #ffffff;
+        }
+
+        .light-theme .bio {
+            background-color: #e0e0e0;
+        }
+
+        .light-theme .post {
+            background-color: #ffffff;
+        }
+
+        .light-theme .post-title {
+            color: #8f42f5;
+        }
+
+        /* Center profile pic on small screens */
+        @media (max-width: 768px) {
+            .profile-section {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .profile-pic {
+                margin-bottom: 20px;
+            }
+
+            .user-details {
+                margin-left: 0;
+                text-align: center;
+            }
+
+            .actions {
+                justify-content: center;
+                width: 100%;
+            }
+
+            .theme-button, .edit-button {
+                width: 100%;
+                text-align: center;
+            }
+        }
+        .navbar {
+    background-color: #4c51bf; /* Cyber Purple */
+    padding: 10px 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.navbar ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: space-around; /* Evenly space links */
+}
+
+.navbar li {
+    margin: 0 15px; /* Spacing between links */
+}
+
+.navbar a {
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.navbar a:hover {
+    color: #e0e0e0; /* Lighten the text on hover */
+}
+/* Style for the popups */
+.popup {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-content {
+    background-color: #1d1f27;
+    padding: 20px;
+    border-radius: 5px;
+    width: 300px;
+    text-align: center;
+    text-decoration: none;
+}
+
+.close-btn {
+    float: right;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+/* accounts/static/css/style.css */
+h2 {
+    color: #6a1b9a; /* Cyber purple */
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Poppins:wght@500;700&family=Lora:ital@1&display=swap');
+.edit-button1 {
+            background-color: #271d1d;
+            color: #fff;
+            border: 1px solid #ff0000;
+            padding: 10px 18px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-family: 'Roboto', 'Helvetica Neue', 'Arial', sans-serif;
+            font-weight: 600; /* Maximum weight */
+            font-size: 1.2rem; /* Font size in pixels */
+            transition: background-color 0.3s ease;
+        }
+
+        .edit-button1:hover {
+            background-color: #ff0000;
+        }
+        .edit-button01 {
+            background-color: #7432df;
+            color: #fff;
+            border: 0.5px solid #7432df;
+            padding: 10px 18px;
+            border-radius: 1px;
+            cursor: pointer;
+            font-family: 'Roboto', 'Helvetica Neue', 'Arial', sans-serif;
+            font-weight: 600; /* Maximum weight */
+            font-size: 0.9rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .edit-button01:hover {
+            background-color: #7432df;
+        }
+        .edit-button02 {
+            background-color: #1d1f27;
+            color: #fff;
+            border: 0.5px solid #7432df;
+            padding: 10px 18px;
+            border-radius: 1px;
+            cursor: pointer;
+            font-family: 'Roboto', 'Helvetica Neue', 'Arial', sans-serif;
+            font-weight: 600; /* Maximum weight */
+            font-size: 0.9rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .edit-button02:hover {
+            background-color: #7432df;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #18002E; /* Darker Cyber Purple */
+            padding: 10px 20px;
+            color: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Logo Section */
+        .logo {
+            font-size: 20px;  /* Smaller font size for logo */
+            font-weight: bold;
+            color: white;
+            text-transform: uppercase;
+            margin-right: 15px;
+        }
+
+        .logo span {
+            color: #9B4DFF; /* Lighter, neon Cyber Purple */
+        }
+
+        /* Navigation menu */
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: 6px;  /* Reduced gap between icons */
+        }
+
+        .nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 10px;  /* Smaller font size for navigation text */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative; /* For line animation */
+            padding: 4px;  /* Added padding to make it touch-friendly */
+        }
+
+        /* Navigation icon */
+        .nav i {
+            font-size: 18px; /* Smaller icon size */
+            margin-bottom: 3px;
+            transition: color 0.3s ease;
+        }
+
+        /* Line animation on hover */
+        .nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px; /* Position the line below text */
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #9B4DFF; /* Neon purple line */
+            transition: width 0.3s ease;
+        }
+
+        .nav a:hover {
+            color: #9B4DFF; /* Change text color on hover to neon purple */
+        }
+
+        .nav a:hover::after {
+            width: 100%; /* Line grows to full width on hover */
+        }
+
+        /* Search Bar */
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background-color: #1F0039; /* Slightly darker purple for search bar */
+            padding: 0;
+            width: 160px; /* More compact width */
+            border-radius: 0;  /* No border-radius to make it flush */
+        }
+
+        .search-bar input {
+            border: none;
+            outline: none;
+            padding: 5px 8px;
+            font-size: 12px;  /* Smaller font size */
+            width: 100%;
+            background-color: #333333; /* Dark input background */
+            color: white;
+        }
+
+        .search-bar button {
+            background-color: #9B4DFF; /* Neon purple search button */
+            border: none;
+            padding: 6px;
+            cursor: pointer;
+            margin-left: -1px;  /* Tighten the space between button and input */
+        }
+
+        .search-bar button i {
+            color: white;
+            font-size: 14px; /* Smaller icon for the search button */
+        }
+
+        /* Mobile view header */
+        @media (max-width: 500px) {
+            .header {
+                flex-direction: column;
+                padding: 8px;
+                text-align: center;
+                gap: 8px;
+            }
+
+            .logo {
+                font-size: 18px;
+                margin-bottom: 5px;
+            }
+
+            .nav {
+                margin-bottom: 8px;
+                justify-content: center;
+                width: 100%;
+                gap: 5px; /* Further reduce the gap on mobile */
+            }
+
+            .nav a {
+                margin: 0;
+                font-size: 9px; /* Make text even smaller */
+                padding: 3px;  /* Tighter padding */
+            }
+
+            .search-bar {
+                width: 90%;
+                margin-top: 10px;
+            }
+
+            .search-bar input {
+                width: calc(100% - 32px); /* Makes room for the search icon */
+            }
+
+            .search-bar button {
+                padding: 5px;
+            }
+        }
+  .messages {
+    margin-top: 20px;
+}
+
+.alert {
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.alert.success {
+    background-color: #4CAF50;
+    color: white;
+}
+.button02 {
+    background-color: #1d1f27;
+    color: #fff;
+    border: 0.5px solid #7432df;
+    padding: 8px 16px;
+    border-radius: 1px;
+    cursor: help;
+    font-family: 'Roboto', 'Helvetica Neue', 'Arial', sans-serif;
+    font-weight: 600; /* Maximum weight */
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease;
+}
+
+.button02:hover {
+  background-color: #7432df;
+}
+.button02 {
+    background-color: #1d1f27;
+    color: #fff;
+    border: 0.5px solid #7432df;
+    padding: 8px 16px;
+    border-radius: 1px;
+    cursor: help;
+    font-family: 'Roboto', 'Helvetica Neue', 'Arial', sans-serif;
+    font-weight: 600; /* Maximum weight */
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease;
+}
+
+.button02:hover {
+  background-color: #7432df;
+}
+
+.button02:focus {
+  box-shadow: var(--tw-ring-inset) 0 0 0 calc(4px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+}
+
+.button02 svg {
+  display: inline;
+  width: 1.3rem;
+  height: 1.3rem;
+  margin-right: 0.75rem;
+  color: white;
+  animation: spin_357 1s linear infinite;
+}
+
+@keyframes spin_357 {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+.accept {
+    background-color: #34a853;
+    color: white;
+    border: 0.5px solid #34a853;
+    padding: 8px 16px;
+    border-radius: 1px;
+    cursor: help;
+    font-family: 'Roboto', 'Helvetica Neue', 'Arial', sans-serif;
+    font-weight: 600; /* Maximum weight */
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease;
+
+}
+.accept:hover{
+    background-color: white;
+    color: #34a853;
+}
+.acceptnope {
+    background-color: #d93025;
+    color: white;
+    border: 0.5px solid #d93025;
+
+    padding: 8px 16px;
+    border-radius: 1px;
+    cursor: help;
+    font-family: 'Roboto', 'Helvetica Neue', 'Arial', sans-serif;
+    font-weight: 600; /* Maximum weight */
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease;
+
+}
+.acceptnope:hover{
+    background-color: #fce8e6;
+    color: #d93025;
+}
+button {
+    background-color: #1d1f27;
+    color: #fff;
+    border: 0.5px solid #7432df;
+    padding: 8px 16px;
+    border-radius: 1px;
+    cursor: help;
+    font-family: 'Roboto', 'Helvetica Neue', 'Arial', sans-serif;
+    font-weight: 600; /* Maximum weight */
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #7432df;
+}
+.posts {
+            padding: 20px;
+        }
+
+        .post {
+            background-color: #211d27;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(207, 125, 255, 0.3);
+        }
+
+        .post .post-title {
+            color: #8f42f5;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .post-content {
+            color: #ccc;
+            margin-bottom: 15px;
+        }
+        .post img {
+            max-width: 100%;
+            border-radius: 10px;
+            margin-top: 10px;}
+
+            .comment-section {
+            display: none;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #444;
+        }
+        .user-card {
+            background-color: #1f1f1f;
+            padding: 20px;
+            border-radius: 10px;
+            width: 300px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .user-card:hover {
+            transform: scale(1.05);
+        }
+
+        .user-card img {
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            margin-bottom: 15px;
+        }
+
+        .user-card h3 {
+            font-size: 20px;
+            color: #9B4DFF; /* Neon purple */
+            margin-bottom: 5px;
+        }
+
+        .user-card p {
+            font-size: 14px;
+            color: #ddd;
+        }
+
+        /* Button Style */
+        .btn {
+            background-color: #9B4DFF; /* Cyber purple */
+            color: white;
+            font-size: 16px;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-weight: 500;
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        .btn:hover {
+            background-color: #7A3AB2; /* Darker purple */
+        }
+
+        /* The Modal (Hidden by default) */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Fixed position */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0, 0, 0, 0.9); /* Dark background */
+        }
+
+        /* Modal Content */
+        .modal-content {
+            background-color: #121212; /* Darker content */
+            margin: 10% auto;
+            padding: 40px;
+            border: 1px solid #9B4DFF;
+            width: 80%; /* Adjust the width of the modal */
+            max-width: 600px;
+            border-radius: 10px;
+            color: white;
+            text-align: center;
+        }
+
+        /* Modal Heading */
+        .modal-content h2 {
+            font-size: 30px;
+            margin-bottom: 10px;
+            font-weight: 700;
+            color: #9B4DFF; /* Neon purple */
+        }
+
+        /* Username Text */
+        .username {
+            font-size: 24px;
+            color: #9B4DFF;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        /* Modal User Info (Text under username) */
+        .user-info {
+            font-size: 16px;
+            color: #bbb;
+            margin-bottom: 20px;
+        }
+
+        /* Modal Image */
+        .modal-content img {
+            width: 60%;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        /* Modal Text */
+        .modal-content p {
+            font-size: 16px;
+            margin-bottom: 30px;
+            color: #ddd;
+            line-height: 1.6;
+            font-weight: 400;
+        }
+
+        /* Input field for sending request */
+        .modal-content input {
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #9B4DFF;
+            border-radius: 4px;
+            width: 80%;
+            background-color: #333;
+            color: white;
+            margin-bottom: 20px;
+            transition: border 0.3s ease;
+        }
+
+        .modal-content input:focus {
+            border-color: #9B4DFF;
+        }
+
+        /* Submit button for request */
+        .modal-content .submit-btn {
+            background-color: #9B4DFF;
+            border: none;
+            color: white;
+            padding: 12px 25px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            font-weight: 500;
+        }
+
+        .modal-content .submit-btn:hover {
+            background-color: #7A3AB2;
+        }
+
+        /* Close Button */
+        .close {
+            color: #9B4DFF;
+            font-size: 30px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close:hover {
+            color: white;
+        }
+
+        /* Responsive Styling for Phones */
+        @media (max-width: 600px) {
+            body {
+                font-size: 14px; /* Slightly smaller text on mobile */
+            }
+
+            .btn {
+                padding: 10px 20px;
+                font-size: 14px;
+                width: 100%;
+            }
+
+            /* Modal Content */
+            .modal-content {
+                width: 90%;
+                padding: 30px;
+            }
+
+            .modal-content h2 {
+                font-size: 24px; /* Smaller heading font on mobile */
+            }
+
+            .modal-content p {
+                font-size: 14px; /* Adjusted for smaller screen */
+                margin-bottom: 20px;
+            }
+
+            .modal-content input {
+                width: 100%; /* Full width input on mobile */
+            }
+
+            .modal-content .submit-btn {
+                width: 100%; /* Full width button on mobile */
+                padding: 10px 0;
+            }
+        }
+    </style>
+    <script>
+        function toggleNav() {
+          const navLinks = document.getElementById('nav-links');
+          navLinks.classList.toggle('show'); // Toggle the 'show' class to display/hide links
+        }
+      </script>
+</head>
+<body>
+    <div class="header">
+        <!-- Logo -->
+        <div class="logo">
+            <span>NETWORK</span>
+        </div>
+
+        <!-- Navigation links with icons -->
+        <div class="nav">
+            <a href="{% url 'home' %}">
+                <i class="fas fa-home"></i> Home
+            </a>
+            <a href="{% url 'inbox' %}">
+                <i class="fas fa-inbox"></i> Inbox
+            </a>
+            <a href="{% url 'user_list' %}">
+                <i class="fas fa-search"></i> Search
+            </a>
+            <a href="{% url 'video_post_list' %}">
+                <i class="fas fa-video"></i> Video
+            </a>
+            <a href="{% url 'image_post_list' %}">
+                <i class="fas fa-images"></i> Images
+            </a>
+            <a href="{% url 'text_post_list' %}">
+                <i class="fas fa-pen"></i> Posts
+            </a>
+            <a href="{% url 'shorts_post_list' %}">
+                <i class="fas fa-tv"></i> Shorts
+            </a>
+            <a href="{% url 'chats_users' %}">
+                <i class="fas fa-comments"></i> Chats
+            </a>
+            <a href="{% url 'logout' %}">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </div>
+
+        <!-- Search Bar -->
+    </div>
+
+        <!-- Cover Photo in HTML -->
+        {% if user.image2 %}
+            <img class="cover-photo" src="{{ user.image2.url }}" alt="Cover Photo">
+        {% else %}
+            <img class="cover-photo" src="https://media.istockphoto.com/id/1346119741/vector/vector-background-with-color-abstract-wave-dots.jpg?s=612x612&w=0&k=20&c=7lIA0ZrDzwp6HDrXyvgQLOrmATIy2o4bN8HBHoDH-G4=" alt="Cover Photo">
+        {% endif %}
+            <div class="profile-section">
+            <!-- Profile Picture in HTML -->
+        {% if user.profile_image %}
+
+            <img src="{{ user.profile_image.url }}" alt="Profile Image" class="profile-pic">
+        {% else %}
+        {% if user.is_authenticated %}
+        {% if user.gender == 'M' %}
+            <img src="https://pro2-bar-s3-cdn-cf.myportfolio.com/8ee9e0df6a57e6cb08ce8298364354c5/b4dd1698f1d995ddf6dc1caf45e69d0b5550752716af226bf5b6e140d0a48ae6175a3d2b28d2d24e_car_1x1.jpg?h=2f9a2d1908efc225350ee82423d2d7b5&url=aHR0cHM6Ly9taXItczMtY2RuLWNmLmJlaGFuY2UubmV0L3Byb2plY3RzL29yaWdpbmFsLzE5Yjg3YTI5Mjc0MzkzLjU1ZWFkMmU3MWFhNDMuanBn" alt="Profile Picture" class="profile-pic">
+        {% elif user.gender == 'F' %}
+            <img src="https://static.wikia.nocookie.net/dexter/images/e/e9/13_Female.jpg/revision/latest?cb=20200211173357" alt="Profile Picture" class="profile-pic">
+        {% else %}
+            <img src="https://w7.pngwing.com/pngs/1000/665/png-transparent-computer-icons-profile-s-free-angle-sphere-profile-cliparts-free.png" alt="Default Profile Picture" class="profile-pic">
+        {% endif %}
+    {% else %}
+    {% endif %}
+
+    
+        {% endif %}
+
+    
+
+
+    
+            <div class="user-details">
+                <h2>{{ user.username }}</h2>
+                <p>{{ user.username }}</p>
+                <p>{{ user.email }}</p>
+                <p>{{ user.status }}</p>
+                <p><strong>User gender:</strong>
+                        {% if user.is_authenticated %}
+            {% if user.gender == 'M' %}
+               Male
+            {% elif user.gender == 'F' %}
+                Female
+            {% else %}
+            Others</p>
+            {% endif %}
+        {% else %}
+        {% endif %}
+                <div class="profile-container">     
+                               
+                    <!-- Button for Following list -->
+                    
+                
+                    <!-- Popup for following users -->
+                
+                    <!-- Popup for followers -->
+                    
+                </div>
+            </div>
+            <div class="actions">
+
+{% if user.status == 'O' %}
+{% if is_self %}
+    <p>This is your profile.</p>
+{% else %}
+    {% if is_following %}
+        <form action="{% url 'unfollow_user' user.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="edit-button01">Unfollow</button>
+        </form>
+    {% else %}
+        <form action="{% url 'follow_user' user.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="edit-button02">Follow</button>
+        </form>
+    {% endif %}
+{% endif %}
+{% if request_sent %}
+{% if request_sent.status == 'sent' %}
+    
+<button c disabled="" type="button" class="button02">
+    <svg aria-hidden="true" role="status" class="inline w-4 h-4 mr-3 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="#E5E7EB"></path>
+    <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentColor"></path>
+    </svg>
+    Request send, please wait...
+</button>
+
+{% elif request_sent.status == 'accepted' %}
+    <button class="accep">Friend ✔</button>
+{% elif request_sent.status == 'declined' %}
+    <button class="declined">Declined</button>
+{% endif %}
+{% else %}
+<a href="{% url 'send_friend_request' user.id %}"><button class="acceptnope">Add friend</button></a>
+{% endif %}
+{% elif user.status == 'C' %}
+{% if request_sent %}
+{% if request_sent.status == 'sent' %}
+    
+<button c disabled="" type="button" class="button02">
+    <svg aria-hidden="true" role="status" class="inline w-4 h-4 mr-3 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="#E5E7EB"></path>
+    <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentColor"></path>
+    </svg>
+    Request send, please wait...
+</button>
+
+{% elif request_sent.status == 'accepted' %}
+    <button class="accept">Accept ✔</button>
+{% elif request_sent.status == 'declined' %}
+    <button class="declined">Declined ❌</button>
+{% endif %}
+
+{% else %}
+<button id="showPopupBtn" class="acceptnope">Follow</button>
+{% endif %}
+{% endif %}
+<div class="modal" id="myModal">
+    <div class="modal-content">
+        <span class="close" id="closePopupBtn">&times;</span>
+        <!-- User Info Section at the Top -->
+        <div class="username">{{ user.username }}</div>
+        <div class="user-info">{{ user.email }}</div>
+
+        <!-- Modal Image -->
+        {% if user.profile_image %}
+
+            <img src="{{ user.profile_image.url }}" alt="Profile Image" class="profile-pic">
+        {% else %}
+        {% if user.is_authenticated %}
+        {% if user.gender == 'M' %}
+            <img src="https://pro2-bar-s3-cdn-cf.myportfolio.com/8ee9e0df6a57e6cb08ce8298364354c5/b4dd1698f1d995ddf6dc1caf45e69d0b5550752716af226bf5b6e140d0a48ae6175a3d2b28d2d24e_car_1x1.jpg?h=2f9a2d1908efc225350ee82423d2d7b5&url=aHR0cHM6Ly9taXItczMtY2RuLWNmLmJlaGFuY2UubmV0L3Byb2plY3RzL29yaWdpbmFsLzE5Yjg3YTI5Mjc0MzkzLjU1ZWFkMmU3MWFhNDMuanBn" alt="Profile Picture" class="profile-pic">
+        {% elif user.gender == 'F' %}
+            <img src="https://static.wikia.nocookie.net/dexter/images/e/e9/13_Female.jpg/revision/latest?cb=20200211173357" alt="Profile Picture" class="profile-pic">
+        {% else %}
+            <img src="https://w7.pngwing.com/pngs/1000/665/png-transparent-computer-icons-profile-s-free-angle-sphere-profile-cliparts-free.png" alt="Default Profile Picture" class="profile-pic">
+        {% endif %}
+    {% else %}
+    {% endif %}
+
+    
+        {% endif %}
+        <h2>Send Your Request</h2>
+        <p>Fill out the form below to send a request. We'll process it and get back to you as soon as possible.</p>
+        <a href="{% url 'send_friend_request' user.id %}"><button class="edit-button">Submit Request</button></a>
+                <span class="close" id="closePopupBtn">&times;</span>
+
+    </div>
+</div>
+<script>
+    // Get modal, buttons, and close element
+    var modal = document.getElementById("myModal");
+    var btn = document.getElementById("showPopupBtn");
+    var closeBtn = document.getElementById("closePopupBtn");
+    var submitBtn = document.getElementById("submitRequestBtn");
+
+    // When the user clicks the button, open the modal
+    btn.onclick = function() {
+        modal.style.display = "block";
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    closeBtn.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+    // When the user clicks on submit request
+    submitBtn.onclick = function() {
+        var requestInput = document.querySelector(".modal-content input");
+        if (requestInput.value.trim() !== "") {
+            alert("Request submitted: " + requestInput.value);
+            modal.style.display = "none"; // Close the modal after submission
+        } else {
+            alert("Please enter a request before submitting.");
+        }
+    }
+</script>
+
+                
+            </div>
+            
+        </div>
+        <div class="post">
+        {% if request_sent.status == 'accepted' %}
+
+        <a href="{% url 'chat_view' user.id %}"><button class="edit-button">Type a message to {{ user.username }}</button></a>
+        {% endif %}
+        
+        <button id="following-btn" onclick="showPopup('friends-popup')" class="edit-button">
+            Friends {{ followers_count2 }}</button>
+    
+        <!-- Button for Followers list -->
+        <button id="followers-btn" onclick="showPopup('friend_to-popup')" class="edit-button">
+            Friend to {{ following_count2 }} users
+        </button>
+        <button id="following-btn" onclick="showPopup('following-popup')" class="edit-button">
+            Following {{ following_count }}
+        </button>
+    
+        <!-- Button for Followers list -->
+        <button id="followers-btn" onclick="showPopup('followers-popup')" class="edit-button">
+            Followers {{ followers_count }}
+        </button>
+        
+        
+        
+        
+    </div>
+    {% if user.is_authenticated %}
+    {% if user.status == 'O' %}
+    <div class="bio">
+        <p>
+            {{ user.bio }}
+
+        </p>
+    </div>
+    {% elif user.status == 'C' %}
+    {% if request_sent.status == 'accepted' %}
+    <div class="bio">
+        <p>
+            {{ user.bio }}
+
+        </p>
+    </div>
+{% endif %}
+    {% endif %}
+    {% endif %}
+    
+        
+            <!-- Button for Following list -->
+        
+            <!-- Popup for following users -->
+            <div id="following-popup" class="popup">
+                <div class="popup-content">
+                    <span class="close-btn" onclick="closePopup('following-popup')">&times;</span>
+                    <h3>Following Users {{ following_users|length }}</h3>
+                    <ul>
+                        {% for follow in following_users %}
+                            {% if is_following %}
+                        <p>You are following this user.</p>
+                            {% else %}
+                    <li><a href="{% url 'profile' follow.followed.username %}">{{ follow.followed.username }}</a></li>
+                            {% endif %}
+                            
+                        {% empty %}
+                            <li>This user is not following anyone.</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        
+            <!-- Popup for followers -->
+            <div id="followers-popup" class="popup">
+                <div class="popup-content">
+                    <span class="close-btn" onclick="closePopup('followers-popup')">&times;</span>
+                    <h3>Followers {{ followers_count }}</h3>
+                    <ul>
+                        <ul>
+                            {% for follow in followers_list %}
+                            {% if is_self %}
+                                <p>This is your profile.</p>
+                            {% else %}
+
+                                <li>
+                                    <a href="{% url 'profile' follow.follower.username %}">{{ follow.follower.username }}</a>
+                                </li>
+                                {% endif %}
+                            {% empty %}
+                                <li>No followers yet.</li>
+                            {% endfor %}
+                            
+                        </ul>
+                    </ul>
+                </div>
+            </div>
+            <div id="friends-popup" class="popup">
+                <div class="popup-content">
+                    <span class="close-btn" onclick="closePopup('friends-popup')">&times;</span>
+                    <h3>Friends {{ followers_count2 }}</h3>
+                    <ul>
+                        <ul>
+                            {% for follow in followers2_list %}
+                        <li><a href="{% url 'profile' follow.followed.username %}">{{ follow.follower.username }}</a></li>
+                            {% empty %}
+                                <li>No friends yet.</li>
+                            {% endfor %}
+                            
+                        </ul>
+                    </ul>
+                </div>
+            </div>
+            <div id="friend_to-popup" class="popup">
+                <div class="popup-content">
+                    <span class="close-btn" onclick="closePopup('friend_to-popup')">&times;</span>
+                    <h3>Friend to {{ following_count2 }} users</h3>
+                    <ul>
+                        {% for follow in following2_list %}
+                        <li>{{ follow.followed.username }}</li>
+
+                                <li>
+                                    <a href="{% url 'profile' follow.follower.username %}">{{ follow.follower.username }}</a>
+                                </li>
+                            {% empty %}
+                                <li>{{ user.username }} don't friend to any users.</li>
+                            {% endfor %}
+                            
+                        </ul>
+                    </ul>
+                </div>
+            </div>
+        </div>
+<ul>
+    <div class="container"></div>
+
+        
+</ul>
+
+        <!-- Posts Section -->
+        <button onclick="showAllPosts()">Show All Posts</button>
+<button onclick="showImagePosts()">Show Image Posts</button>
+<button onclick="showVideoPosts()">Show Video Posts</button>
+<button onclick="showShortsPosts()">Show Shorts Posts</button>
+
+<!-- Display User All Posts -->
+<div class="post" id="all-posts">
+    <h2>Posts</h2>
+    {% for post in all_posts %}
+    <div class="post" >
+        <div class="user-info">
+            <a href="{% url 'edit_post' post.id %}" ><button class="edit-button1">Edit</button></a>
+        </div>
+        <div>
+            {% if post.video %}
+                <video width="100%" height="100%" controls>
+                    <source src="{{ post.video.url }}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                
+                
+            {% endif %}
+        </div>
+        <p>{{ post.content }}</p>
+        {% if post.image %}
+            <img src="{{ post.image.url }}" alt="Post image">
+            <p class="post-date">{{ post.created_at }}</p>
+            
+        {% endif %}
+        <button class="toggle-button" onclick="toggleComments('{{ post.id }}')">Show Comments</button>
+        <p>Likes: {{ post.likes.count }}</p>
+
+    {% if request.user in post.likes.all %}
+        <form action="{% url 'unlike_post' post.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="heart-button liked">♥ {{ post.likes.count }}</button>
+        </form>
+    {% else %}
+        <form action="{% url 'like_post' post.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="heart-button">♡ {{ post.likes.count }}</button>
+        </form>
+    {% endif %}
+    
+            
+            
+                </div>
+        </div>
+    </div>
+{% endfor %}
+</div>
+
+<!-- Display User Image Posts -->
+<div id="image-posts" class="post" style="display: none;">
+    <h2>Your Image Posts</h2>
+    {% for post in image_posts %}
+        <div class="post">
+            <h3>{{ post.title }}</h3>
+            {% if post.image %}
+            <img src="{{ post.image.url }}" alt="{{ image_post.title }}">
+        {% else %}
+            <div class="sorry">Image block</div>
+        {% endif %}
+            <p>{{ post.content }}</p>
+            <p>Posted {{ post.created_at|timesince }} ago</p>
+            <h2>♥ {{ post.likes.count }}</h2>
+        </div>
+    {% empty %}
+        <p>No image posts available.</p>
+    {% endfor %}
+</div>
+
+<!-- Display User Video Posts -->
+<div id="video-posts" class="post" style="display: none;">
+    <h2>Your Video Posts</h2>
+    {% for post in video_posts %}
+        <div>
+            <h3>{{ post.title }}</h3>
+            <video width="320" height="240" controls>
+                <source src="{{ post.video.url }}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <p>{{ post.content }}</p>
+            <p>Posted {{ post.created_at|timesince }} ago</p>
+            <h2>♥ {{ post.likes.count }}</h2>
+        </div>
+    {% empty %}
+        <p>No video posts available.</p>
+    {% endfor %}
+</div>
+
+<!-- Display User Shorts Posts -->
+<div id="shorts-posts" class="post" style="display: none;">
+    <h2>Your Shorts Posts</h2>
+    {% for post in shorts_posts %}
+        <div class="post">
+
+            <h3>Short by {{ post.author.username }}</h3>
+            <video width="320" height="240" controls>
+                <source src="{{ post.video.url }}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <p>{{ post.content }}</p>
+            <p>Posted {{ post.created_at|timesince }} ago</p>
+            <h2>♥ {{ post.likes.count }}</h2>
+        </div>
+    {% empty %}
+        <p>No shorts posts available.</p>
+    {% endfor %}
+</div>
+
+    <script>
+        document.addEventListener('keyup', function(e){
+  if(e.keyCode == 'R' || 'r')
+    window.location.reload();
+})
+        function toggleTheme() {
+            document.body.classList.toggle('light-theme');
+        }
+
+        function editProfile() {
+            alert("Edit Profile button clicked!");
+        }
+
+        function showPopup(popupId) {
+        var popup = document.getElementById(popupId);
+        popup.style.display = 'flex';
+    }
+
+    function closePopup(popupId) {
+        var popup = document.getElementById(popupId);
+        popup.style.display = 'none';
+    }
+
+    // Close popup if clicked outside the content
+    window.onclick = function(event) {
+        var followingPopup = document.getElementById('following-popup');
+        var followersPopup = document.getElementById('followers-popup');
+        if (event.target == followingPopup) {
+            followingPopup.style.display = 'none';
+        }
+        if (event.target == followersPopup) {
+            followersPopup.style.display = 'none';
+        }
+    }
+    function showAllPosts() {
+        document.getElementById('all-posts').style.display = 'block';
+        document.getElementById('image-posts').style.display = 'none';
+        document.getElementById('video-posts').style.display = 'none';
+        document.getElementById('shorts-posts').style.display = 'none';
+    }
+
+    function showImagePosts() {
+        document.getElementById('all-posts').style.display = 'none';
+        document.getElementById('image-posts').style.display = 'block';
+        document.getElementById('video-posts').style.display = 'none';
+        document.getElementById('shorts-posts').style.display = 'none';
+    }
+
+    function showVideoPosts() {
+        document.getElementById('all-posts').style.display = 'none';
+        document.getElementById('image-posts').style.display = 'none';
+        document.getElementById('video-posts').style.display = 'block';
+        document.getElementById('shorts-posts').style.display = 'none';
+    }
+
+    function showShortsPosts() {
+        document.getElementById('all-posts').style.display = 'none';
+        document.getElementById('image-posts').style.display = 'none';
+        document.getElementById('video-posts').style.display = 'none';
+        document.getElementById('shorts-posts').style.display = 'block';
+    }
+    </script>
+</body>
+</html>

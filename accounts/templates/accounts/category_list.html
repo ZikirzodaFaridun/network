@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categories</title>
+    <style>
+        /* Body styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1e1e2f;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            margin: 0;
+        }
+
+        /* Page title */
+        h1 {
+            font-size: 2.5em;
+            color: #a42eff;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* Search form styling */
+        form {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            max-width: 500px;
+            margin-bottom: 30px;
+        }
+
+        input[type="text"] {
+            font-family: Arial, sans-serif;
+
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 5px 0 0 5px;
+            outline: none;
+            font-size: 1em;
+            color: #fff;
+            background-color: #2a2a3b;
+        }
+
+        button {
+            padding: 12px 20px;
+            font-family: Arial, sans-serif;
+            border: none;
+            border-radius: 0 5px 5px 0;
+            font-weight: bolder;
+            cursor: pointer;
+            background-color: #a42eff;
+            color: #fff;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #9a2bd7;
+        }
+
+        /* Categories list grid */
+        .category-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        /* Category item styling */
+        .category-item {
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            background-color: #2a2a3b;
+            color: #fff;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .category-item:hover {
+            background-color: #a42eff;
+            transform: translateY(-5px);
+            color: #fff;
+        }
+
+        /* Links inside category items */
+        .category-item a {
+            color: inherit;
+            text-decoration: none;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .category-item a:hover {
+            text-decoration: underline;
+        }
+
+        /* No categories found message */
+        .no-categories {
+            text-align: center;
+            color: #888;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <h1>Categories</h1>
+
+    <!-- Search form -->
+    <form method="GET" action="{% url 'category_list' %}">
+        <input type="text" name="q" placeholder="Search categories..." value="{{ query }}">
+        <button type="submit">Search</button>
+    </form>
+
+    <!-- Categories list -->
+    <div class="category-list">
+        {% for category in categories %}
+            <div class="category-item">
+                <a href="{% url 'posts_by_category' category.id %}">{{ category.name }}</a>
+            </div>
+        {% empty %}
+            <div class="no-categories">No categories found.</div>
+        {% endfor %}
+    </div>
+</body>
+</html>

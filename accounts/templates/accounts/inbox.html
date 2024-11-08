@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inbox</title>
+    
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+}
+
+.inbox-container {
+    width: 80%;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+h2, h3 {
+    color: #333;
+}
+
+.request-list {
+    margin-top: 10px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.request-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #e0e0e0;
+    transition: background-color 0.3s;
+}
+
+.request-item:hover {
+    background-color: #f1f3f4;
+}
+
+.request-checkbox {
+    margin-right: 10px;
+}
+
+.username {
+    flex: 1;
+    color: #202124;
+    font-weight: 500;
+}
+
+.actions {
+    display: flex;
+}
+
+.action-form {
+    display: inline;
+    margin-left: 10px;
+}
+
+.accept-button, .decline-button {
+    background-color: #1a73e8;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    margin: 0 5px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.3s;
+}
+
+.accept-button:hover {
+    background-color: #1669c1;
+}
+
+.decline-button {
+    background-color: #d93025;
+}
+
+.decline-button:hover {
+    background-color: #b71c1c;
+}
+
+.status {
+    padding: 5px 10px;
+    font-size: 0.9em;
+    border-radius: 4px;
+}
+
+.status.accepted {
+    color: #34a853;
+    background-color: #e6f4ea;
+}
+
+.status.declined {
+    color: #d93025;
+    background-color: #fce8e6;
+}
+
+    </style>
+</head>
+<body>
+    <div class="inbox-container">
+        <h2>Inbox</h2>
+
+        <h3>Received Friend Requests</h3>
+        <div class="request-list">
+            {% for request in received_requests %}
+                <div class="request-item">
+                    <input type="checkbox" class="request-checkbox">
+                    <p class="username">{{ request.from_user.username }}</p>
+                    <div class="actions">
+                        {% if request.status == 'sent' %}
+                            <form action="{% url 'accept_friend_request' request.id %}" method="POST" class="action-form">
+                                {% csrf_token %}
+                                <button type="submit" class="accept-button">Accept</button>
+                            </form>
+                            <form action="{% url 'decline_friend_request' request.id %}" method="POST" class="action-form">
+                                {% csrf_token %}
+                                <button type="submit" class="decline-button">Decline</button>
+                            </form>
+                        {% elif request.status == 'accepted' %}
+                            <span class="status accepted">Accepted</span>
+                        {% elif request.status == 'declined' %}
+                            <span class="status declined">Declined</span>
+                        {% endif %}
+                    </div>
+                </div>
+            {% empty %}
+                <p>No friend requests at this time.</p>
+            {% endfor %}
+        </div>
+
+        <h3>Sent Friend Requests</h3>
+        <div class="request-list">
+            {% for request in sent_requests %}
+                <div class="request-item">
+                    <input type="checkbox" class="request-checkbox">
+                    <p class="username">To {{ request.to_user.username }}</p>
+                    <span class="status">{{ request.get_status_display }}</span>
+                </div>
+            {% empty %}
+                <p>You have not sent any friend requests.</p>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

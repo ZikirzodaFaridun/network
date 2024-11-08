@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post with Styled Content</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1e1e2f;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap; /* Allow wrapping for multiple posts */
+        }
+        .post-container {
+            width: 500px;
+            background: #2a2a3b;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+            padding: 20px;
+            margin: 10px; /* Space between posts */
+            display: flex;
+            flex-direction: column; /* Set to column layout */
+            transition: transform 0.2s;
+        }
+        .post-container:hover {
+            transform: translateY(-4px);
+        }
+        .post-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 15px;
+            border: 2px solid #6200ea;
+            object-fit: cover;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+        .user-name {
+            font-weight: bold;
+            color: #fff;
+            font-size: 1.1em;
+        }
+        .post-time {
+            font-size: 0.85em;
+            color: #bbb;
+        }
+        .post-content {
+            background: #3a3a4e;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 15px 0;
+            font-size: 1.1em;
+            color: #e0e0e0;
+        }
+        .post-image {
+            width: 100%;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 10px rgba(132, 0, 255, 0.5);
+        }
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+        .button {
+            background-color: #1d1f27;
+            color: #fff;
+            border: 0.5px solid #7432df;
+            padding: 8px 16px;
+            border-radius: 1px;
+            cursor: pointer;
+            font-family: 'Roboto', 'Helvetica Neue', 'Arial', sans-serif;
+            font-weight: 600; /* Maximum weight */
+            font-size: 0.9rem;
+            transition: background-color 0.3s ease;
+            overflow: hidden;
+            position: relative;
+        }
+        .button:hover {
+            background-color: #7432df;
+        }
+        .like-count {
+            font-weight: bold;
+            color: #ddd;
+            align-self: center;
+        }
+        .comment-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #444;
+            border-radius: 5px;
+            margin-top: 10px;
+            background: #333;
+            color: #fff;
+            display: none;
+        }
+        .comments {
+            margin-top: 15px;
+            border-top: 1px solid #444;
+            padding-top: 10px;
+            display: none; /* Hidden by default */
+        }
+        .comment {
+            font-family: Arial, sans-serif;
+            display: flex;
+            align-items: center;
+            margin: 5px 0;
+            color: #b15eff;
+        }
+        .comment-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 10px;
+            border: 2px solid #6200ea;
+        }
+        .comment-text {
+            background: #0000ff;
+            border-radius: 5px;
+            padding: 8px;
+            width: fit-content;
+        }
+        .profile-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+}
+.comment-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.comment-input {
+    background-color: #2a2a3b;
+    width: 95%;
+    height: 100px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    font-size: 14px;
+    resize: none;
+}
+
+.comment-input:focus {
+    outline: none;
+    border-color: #a42eff;
+    width: 100%;
+}
+
+.comment-submit {
+    padding: 8px 12px;
+    background-color: #a42eff;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.comment-submit:hover {
+    background-color: #8e24db;
+}
+.comment-form {
+    background-color: #100; /* Light background for contrast */
+    border: 1px solid #ddd; /* Light gray border */
+    border-radius: 8px; /* Rounded corners */
+    padding: 20px; /* Padding around the content */
+    margin: 20px 0; /* Margin above and below the form */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+.comment-input input[type="text"],
+.comment-input textarea {
+    background-color: #1e1e2f;
+    color: white;
+    width: 90%; /* Full width input fields */
+    top: 10px;
+    height: 30px;
+    padding: 10px 10px; /* Padding inside the input fields */
+    border: 1px solid #ccc; /* Border for the input fields */
+    margin-bottom: 10px; /* Space between input fields */
+    font-size: 16px; /* Font size */
+    transition: border-color 0.3s; /* Smooth transition for border color */
+}
+
+.comment-input input[type="text"]:focus,
+.comment-input textarea:focus {
+    border-color: #a42eff; /* Border color on focus */
+    outline: none; /* Remove default outline */
+}
+
+.comment-submit {
+    background-color: #a42eff; /* Primary button color */
+    color: white; /* Button text color */
+    border: none; /* Remove border */
+    border-radius: 4px; /* Rounded corners for the button */
+    padding: 10px 15px; /* Padding inside the button */
+    font-size: 16px; /* Button font size */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s, transform 0.2s; /* Smooth transitions */
+}
+
+.comment-submit:hover {
+    background-color: #9a2bd7; /* Darker shade on hover */
+    transform: translateY(-1px); /* Lift effect on hover */
+}
+
+.comment-submit:active {
+    transform: translateY(0); /* Reset lift effect when clicked */
+}
+    /* Container */
+    .container {
+      max-width: 1000px;
+      margin: 30px auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Comment Section */
+    .comment-section {
+      margin-top: 30px;
+    }
+
+    .comment-header {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      color: #0078D4;
+    }
+
+    /* Comment Form */
+    .comment-form {
+      display: flex;
+      align-items: center;
+      background-color: #f9f9f9;
+      border-radius: 8px;
+      padding: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .comment-form img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+
+    .comment-form textarea {
+      width: 100%;
+      height: 60px;
+      padding: 10px;
+      border-radius: 8px;
+      resize: none;
+      font-size: 16px;
+      color: #333;
+      background-color: #fff;
+      transition: border-color 0.3s ease;
+    }
+
+    .comment-form textarea:focus {
+      border-color: #0078D4;
+      outline: none;
+    }
+
+    .comment-form button {
+      background-color: #0078D4;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      margin-left: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s ease;
+    }
+
+    .comment-form button:hover {
+      background-color: #005fa3;
+    }
+
+    .character-count {
+      font-size: 14px;
+      color: #666;
+      margin-top: 5px;
+    }
+
+    .comment {
+      background-color: #f1f1f1;
+      border-radius: 10px;
+      padding: 15px;
+      margin-top: 20px;
+      box-shadow: 0 1px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .comment .comment-header {
+      font-size: 14px;
+      color: #0078D4;
+      margin-bottom: 5px;
+    }
+
+    .comment .comment-body {
+      font-size: 16px;
+      color: #333;
+    }
+
+    /* Responsive for smaller devices */
+    @media (max-width: 768px) {
+      .container {
+        padding: 15px;
+      }
+
+      .comment-form textarea {
+        height: 50px;
+      }
+
+      .comment-form button {
+        padding: 8px 12px;
+      }
+
+      .comment .comment-body {
+        font-size: 14px;
+      }
+    }
+    button {
+            background-color: #1d1f27;
+            color: #fff;
+            border: 0.5px solid #7432df;
+            padding: 8px 16px;
+            border-radius: 1px;
+            cursor: pointer;
+            font-family: 'Roboto', 'Helvetica Neue', 'Arial', sans-serif;
+            font-weight: 600; /* Maximum weight */
+            font-size: 0.9rem;
+            transition: background-color 0.3s ease;
+            overflow: hidden;
+            position: relative;
+        }
+        button:hover {
+            background-color: #7432df;
+        }
+    </style>
+</head>
+<body>
+    {% for post in text_posts %}
+    <div class="post-container">
+        <div class="post-header">
+            {% if post.author.profile_image %}
+            <img src="{{ post.author.profile_image.url }}" alt="{{ post.author.username }}'s profile image" class="user-avatar">
+        {% else %}
+            <img src="data:image/png;base64,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" alt="Default profile image" class="user-avatar">
+        {% endif %}
+            <div>
+                <div class="user-name">{{ post.author.username }}</div>
+                <div class="post-time">{{ post.created_at|timesince }} ago</div>
+            </div>
+        </div>
+        {% if post.image %}
+            <img src="{{ post.image.url }}" alt="Post image" class="post-image">
+        {% endif %}
+        <div class="post-content">
+            {{ post.content }}
+        </div>
+        <div class="action-buttons">
+            <form action="{% url 'toggle-like-image-post' post.id %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="button">
+                    {% if liked %}
+                        🤍
+                    {% else %}
+                        💜 {{ post.likes_count }}
+                    {% endif %}
+                </button>
+            </form>
+            <button class="button" onclick="toggleComments(this)">💬 Comments</button>
+        </div>
+
+        <!-- Comment Input (Initially Hidden) -->
+        <form action="{% url 'image_post_list' %}" method="post" class="comment-input">
+            {% csrf_token %}
+            <input type="hidden" name="post_id" value="{{ post.id }}">
+            <!-- Comment Input -->
+            {{ form.content }}
+            <button type="submit">Post Comment</button>
+        </form>
+
+        <!-- Comments Section (Initially Hidden) -->
+        <div class="comments">
+            {% for comment in post.comments3.all %}
+                <div class="comment">
+                    {% if comment.user.profile_image %}
+                        <img src="{{ comment.user.profile_image.url }}" alt="{{ comment.user.username }}'s profile image" class="comment-avatar">
+                    {% else %}
+                        <img src="https://example.com/default-profile.png" alt="Default Profile Picture" class="comment-avatar">
+                    {% endif %}
+                    <p><strong>{{ comment.user.username }}</strong>: {{ comment.content }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% empty %}
+        <div>No text posts available.</div>
+    {% endfor %}
+
+    <script>
+        function toggleComments(button) {
+            // Find the comment input and comments section related to the clicked button
+            const commentInput = button.parentElement.nextElementSibling;
+            const commentsSection = commentInput.nextElementSibling;
+
+            // Toggle visibility of the comment input and comments section
+            const isVisible = commentsSection.style.display === 'block';
+
+            commentInput.style.display = isVisible ? 'none' : 'block';
+            commentsSection.style.display = isVisible ? 'none' : 'block';
+
+            // Focus on the comment input field when it appears
+            if (!isVisible) {
+                commentInput.focus();
+            }
+        }
+        window.addEventListener('load', function () {
+            // Check if there's a saved scroll position
+            const scrollPos = sessionStorage.getItem('scrollPosition');
+            if (scrollPos) {
+                window.scrollTo(0, scrollPos);
+            }
+        });
+
+        // Save scroll position when scrolling
+        window.addEventListener('scroll', function () {
+            sessionStorage.setItem('scrollPosition', window.scrollY);
+        });
+    </script>
+</body>
+</html>

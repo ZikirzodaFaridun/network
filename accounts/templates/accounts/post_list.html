@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post List</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #6200ea;
+            margin-bottom: 30px;
+        }
+        .post {
+            background-color: #1f1f1f;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            padding: 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            
+        }
+        .post img {
+            width: 100%;
+            border-radius: 10px;
+            margin-top: 10px;
+            height: 10%;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .user-info img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .comment-section {
+            display: none;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #444;
+        }
+        .comment {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+            background-color: #2e2e2e;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .comment img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 10px;
+            object-fit: cover;
+        }
+        button {
+            background-color: #6200ea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #3700b3;
+        }
+        textarea {
+            width: calc(100% - 110px); /* Adjusted width to fit with button */
+            padding: 10px;
+            border: 1px solid #444;
+            border-radius: 5px;
+            background-color: #2e2e2e;
+            color: white;
+            resize: none;
+            margin-right: 10px; /* Added margin to the right */
+        }
+        textarea:focus {
+            outline: none;
+            border-color: #6200ea;
+        }
+        .comment-form {
+            display: flex; /* Set to flex for side-by-side layout */
+            align-items: center; /* Center align items */
+            margin-top: 10px;
+        }
+        .toggle-button {
+            background-color: #03dac6;
+            padding: 8px 15px;
+            border-radius: 5px;
+            border: none;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .toggle-button:hover {
+            background-color: #018786;
+        }
+        .post-list {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.user-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+    object-fit: cover;
+}
+
+.post-date {
+    font-size: 0.9em;
+    color: gray;
+    margin-top: 5px;
+}
+.heart-button {
+    font-size: 24px;
+    color: gray;
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+.heart-button.liked {
+    color: red;
+}
+* {
+  box-sizing: border-box;
+}
+
+body {
+  width: 100%;
+  margin: 0;
+  font-family: sans-serif;
+  background:  #081730;
+}
+
+h1 {
+ font-size: 1.2em;
+ font-weight: normal;
+ font-family: Questrial;
+ text-align: center;
+ color: #fff;
+}
+
+h2 { 
+ text-align: center;
+ color: #ff0048;
+}
+
+h3 { 
+ text-align: center;
+ color: #fff
+}
+
+.vjs-icon-captions:before,
+.vjs-cosmos:lang(en) .vjs-subs-caps-button .vjs-icon-placeholder:before,
+.vjs-cosmos:lang(fr-CA) .vjs-subs-caps-button .vjs-icon-placeholder:before,
+.vjs-cosmos .vjs-captions-button .vjs-icon-placeholder:before {
+  content: "\f165";
+}
+.post {
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #081730;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+}
+
+.profile-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.comment-section {
+    margin-top: 10px;
+}
+
+.comment {
+    margin: 5px 0;
+    padding: 5px;
+    border: 1px solid #e1e1e1;
+    border-radius: 5px;
+}
+
+.heart-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+    </style>
+    <script>
+        function toggleComments(postId) {
+            const commentsSection = document.getElementById('comments-' + postId);
+            if (commentsSection.style.display === 'none' || commentsSection.style.display === '') {
+                commentsSection.style.display = 'block';
+            } else {
+                commentsSection.style.display = 'none';
+            }
+        }
+        function toggleComments(postId) {
+    const commentsDiv = document.getElementById(`comments-${postId}`);
+    if (commentsDiv.style.display === "none") {
+        commentsDiv.style.display = "block";
+    } else {
+        commentsDiv.style.display = "none";
+    }
+}
+
+    </script>
+</head>
+<body>
+    <form method="GET" action="{% url 'post_list' %}">  <!-- Adjust 'post_list' to your URL name -->
+        <input type="text" name="q" placeholder="Search posts..." value="{{ query }}" />
+        <button type="submit">Search</button>
+    </form>
+    
+    <div class="post-list">
+        {% for post in posts %}
+        <div class="post-item">
+            <!-- Display author profile picture -->
+            <div class="post-header">
+                <img src="{{ post.author.profile.image.url }}" alt="{{ post.author.username }}'s profile picture" class="profile-image">
+                <div class="author-info">
+                    <h3>{{ post.author.username }}</h3>
+                    <span class="timestamp">{{ post.created_at|timesince }} ago</span>
+                </div>
+            </div>
+    
+            <!-- Display post title and content -->
+            <div class="post-content">
+                <h4>{{ post.title }}</h4>
+                <p>{{ post.content }}</p>
+            </div>
+    
+            <!-- Like and comment buttons -->
+            <div class="post-actions">
+                <button class="like-button">Like</button>
+                <button class="comment-button" onclick="toggleComments('{{ post.id }}')">Comments</button>
+                <span class="like-count">{{ post.likes.count }} Likes</span>
+            </div>
+    
+            <!-- Comments section, hidden by default -->
+            <div class="post-comments" id="comments-{{ post.id }}" style="display: none;">
+                {% for comment in post.comments.all %}
+                <div class="comment">
+                    <strong>{{ comment.user.username }}</strong>: {{ comment.content }}
+                    <span class="timestamp">{{ comment.created_at|timesince }} ago</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <script>
+        function toggleComments(postId) {
+            const commentsSection = document.getElementById(`comments-${postId}`);
+            if (commentsSection.style.display === "none") {
+                commentsSection.style.display = "block";
+            } else {
+                commentsSection.style.display = "none";
+            }
+        }
+    </script>
+    <h1>Text Posts</h1>
+{% for post in text_posts %}
+<div class="post" >
+    <div class="user-info">
+        {% if post.user.profile_image %}
+                    <img src="{{ post.user.profile_image.url }}" alt="{{ post.user.username }}'s profile image" class="user-image">
+                {% else %}
+                    <img src="https://s3.amazonaws.com/org.kellenberg.www-media/wp-content/uploads/2019/10/04112751/facebook-user-icon-19.jpg" alt="Default profile image" class="user-image">
+                {% endif %}
+        <strong>{{ post.user.username }}</strong>
+        
+    </div>
+    <div>
+        {% if post.video %}
+            <video width="100%" height="100%" controls>
+                <source src="{{ post.video.url }}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            
+            
+        {% endif %}
+    </div>
+    <h3>{{ post.title }}</h3>
+    <p>{{ post.content }}</p>
+    {% if post.image %}
+        <img src="{{ post.image.url }}" alt="Post image" class="post-image">
+        <p class="post-date">{{ post.created_at }}</p>
+    {% endif %}
+    <button class="toggle-button" onclick="toggleComments('{{ post.id }}')">Show Comments</button>
+    <p>Likes: {{ post.likes.count }}</p>
+
+{% if request.user in post.likes.all %}
+    <form action="{% url 'unlike_post' post.id %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="heart-button liked">♥ {{ post.likes.count }}</button>
+    </form>
+{% else %}
+    <form action="{% url 'like_post' post.id %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="heart-button">♡ {{ post.likes.count }}</button>
+    </form>
+{% endif %}
+<p class="views">Views: {{ post.views }}</p>  <!-- Display the view count -->
+
+    <div id="comments-{{ post.id }}" class="comment-section">
+        
+        {% for comment in post.comments.all %}
+            <div class="comment">
+                {% if comment.user.profile_image %}
+                    <img src="{{ comment.user.profile_image.url }}" alt="{{ comment.user.username }}'s profile image">
+                {% else %}
+                {% if user.is_authenticated %}
+                {% if user.gender == 'M' %}
+                    <img src="https://pro2-bar-s3-cdn-cf.myportfolio.com/8ee9e0df6a57e6cb08ce8298364354c5/b4dd1698f1d995ddf6dc1caf45e69d0b5550752716af226bf5b6e140d0a48ae6175a3d2b28d2d24e_car_1x1.jpg?h=2f9a2d1908efc225350ee82423d2d7b5&url=aHR0cHM6Ly9taXItczMtY2RuLWNmLmJlaGFuY2UubmV0L3Byb2plY3RzL29yaWdpbmFsLzE5Yjg3YTI5Mjc0MzkzLjU1ZWFkMmU3MWFhNDMuanBn" alt="Profile Picture" class="profile-pic">
+                {% elif user.gender == 'F' %}
+                    <img src="https://static.wikia.nocookie.net/dexter/images/e/e9/13_Female.jpg/revision/latest?cb=20200211173357" alt="Profile Picture" class="profile-pic">
+                {% else %}
+                    <img src="https://w7.pngwing.com/pngs/1000/665/png-transparent-computer-icons-profile-s-free-angle-sphere-profile-cliparts-free.png" alt="Default Profile Picture" class="profile-pic">
+                {% endif %}
+            {% else %}
+            {% endif %}
+                {% endif %}
+                <p><strong>{{ comment.user.username }}</strong>: {{ comment.content }}</p>
+                {% if request.user in post.likes.all %}
+    <form action="{% url 'unlike_post' post.id %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="heart-button liked">♡</button>
+    </form>
+{% else %}
+    <form action="{% url 'like_post' post.id %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="heart-button">♥</button>
+    </form>
+{% endif %}
+            </div>
+        {% endfor %}
+        <form method="post" class="comment-form">
+            {% csrf_token %}
+            <input type="hidden" name="post_id" value="{{ post.id }}">
+            <textarea name="content" placeholder="Add a comment..." required></textarea>
+            <button type="submit">Comment</button>
+        </form>
+    </div>
+</div>
+{% endfor %}
+<div id="post">
+    <div class="post-content">
+        <h3 id="post-title">Post Title Here</h3>
+        <p id="post-description">This is the post content...</p>
+        <video id="post-video" controls>
+            <source src="path_to_video.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="like-section">
+            <button id="like-button">Like</button>
+            <span id="like-count">0 Likes</span>
+        </div>
+        <div class="comment-section">
+            <button id="show-comments">Show Comments</button>
+            <div id="comments" style="display: none;">
+                <div class="comment">This is a comment!</div>
+                <div class="comment">This is another comment!</div>
+            </div>
+            <textarea id="new-comment" placeholder="Add a comment..."></textarea>
+            <button id="add-comment">Add Comment</button>
+        </div>
+    </div>
+</div>
+
+{% for post in posts2 %}
+    <div class="post">
+        <h2>{{ post.title }}</h2>
+        <p>{{ post.content }}</p>
+        <p>Posted by: {{ post.author.username }}</p>
+        
+        {% if post.author.profile_image %}
+            <img src="{{ post.author.profile_image.url }}" alt="{{ post.author.username }}'s profile image" class="profile-image">
+        {% else %}
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAABI1BMVEX///9Veen8zLY6MDHg7PxGatf//v////1VeeruvKX8zLX///z7zbZVeef+y7b8zLg6LzI6MC//0rxRd+w0KCr9+PT6////z7/o5+coHR788ur22sz55twRAADv7u0vJCYcDxCGhIX0w6zlyLj20MDw+Pxde9lMcNySl87p8vxCbN+ouem9yuqxwOS+v72OjoxlYmFGQECppqdSTU4MAACalpbT0dJva2weFxbW1NKysa+joqCPfHVHODcrISYmICNgUUqnkIZyXVaCbmoPDBPGpZjiuq2hioDQsKQkFht6aGKhgHGOdGu2nZFVRUK4lIjCvNqbrudph924rNDv0MqEm96Bic3YwdPQ3fOvqdflxs57lNjox8lVctRuh9aVq90yXMgywjc5AAANDElEQVR4nO2dC1faSBTHQ1QmmbyAABahQjGQgtra3bZrd23r2q19P0SxtC663/9T7L0zQaEq5IEm05P/6bGKFeeXe+c+ZiapJKVKlSpVqlSpUqVKlSpVqlSp5qhs9qpPUwmmCTOmdhRTZPXOnTurq7+m+VYfPNx6VLl7t3H37t3Ko62HD1bjHtF85E231d9+f1wpFhfOVSxWHj96ckf6ReLqnXuVSm7hknL1xtZT+Lb4iH9V6gu5qwjBlI0/7sQ9vMha/b1yGW7MXRt/xj3CiHq6PY0P1bgnrJsSiQHmUNMQK1vCIkrSs5kWRNW34h5naJXqLJ7MVOVe3CMNq62iHz5Q40HcQw2nPxvTJ+A4opAVzqovD2XKFf+Ie7Rh9KTuFxAuReNZ3MMNrlX/gKCigPH0r6m1zCUrbotnxEdBAMGI91iJIJCeNYIRLlREq2weBpmGEHRzFdFyInPS/ILXN+Wvwsrl82MJsyhYYbP6mEMgHejK1JhDxgv8etxjDqYHo0jqweUvWzHnXYPRtx6L1Qw/5Isy+dzCtbVpHk1Yr5yv3lTE6oW3ip6ZijvP3734iRLdFmxbf/ly9++1vTqQCjgRPUfMVz4VnP1Prx41/qkUQawdhr/r2/9UdndeO4UCdXY9K4pV1qx62TC3V7Bks1AAzNdvdt7v7X7+/Hl379XO32/X4EWZypRS5zkPSbkFkTLiKN9X9qlFLV2WLcsqjEuWAQ8/wPfeVjBt5PJCtVBPOWHxY4EyCNmUzwWwljz2JS28qjOPbogUTP/kyaLimLo5jiObHip45+gTma7Vcxh1G0/jHnYA8d6w+Kog6+e2Ajt6XBYDG0mXC2/qjFCkuu0Ji4+NNTCQZTImRNL55DMv6PhrplNBQnESInRB94qQ8fJ7BdmfCjtFCKX13/gPJ10E/wBhfqHy1iegLK+9g4RRfyLGNg3JwjCRMPfcrwllWtgrLuSRUAATgjT00oWFF298E+r0LQRfICRaOe7R+xGRau95tvftpbTwHLNnTRAbSqXmx2I+t1vwTWhahZ36Qv1DsyQEYlaqqkD44lPBnM3mmdAy97dz9Q9qVQRCImn7zQ9gESeAk1r68ufcyy/qfkmAYAqzUG1+qefe+44zEGlM3XpT3H6tqrW4h+9DBJxU/fLy5Wv/gFDYgJs2kLAa9/D9iKyp6uvtSgAnRURoE9/tq+pa3KP3oawEhPvbewVdn03mydRlvbDzQoUfjHv4voSEFYik1my0cxtC2H1bbApE2Cw6lAYitExnFwiduAfvSxBpmh8L1kRjP0sUWv0v4KVHcQ/el2o4n7AlDJDxqa5TMKEQ2QKKNhhpEyox2XeogYxPdRMJS3EP3pcwXTRhbulB8gVIFSNZYMpfgbGaMg2QLtgKFfzUihjNE5beqoWOF5SwSrICVN7Y4oOfmnKAecjCrq6uaXEP3qcIKZfWLIqVSgDp+poY3SEakRCJVNmyaABRR0MPF4MRVWPbFQFkipEKL7QSoKBBC8rmStxDDqiSFSAbUpOalhjJ/kKaQwM0FyZl01AsVYNUNFDECtHdjwkKGxqgt7AsWbRAE3AiQu0t2jQEK1b9m5DqtCpOIuSCzL3i34KmbgqzoD8SEJYc30Y0TackUDXDBeP176aWWcVSTzBlIdaY0OnPwsQFDF1eEZCQxZrZpamOOcWEdC8gIcQa6IJnQZoUIYWLM6wPZjORemefphBaWLFlxUNkA15xqG5OJ6S4P1oT4oTCTyI4aMz6090UD9rQKsxCEechquTMWo7CXSfxCrZzETKzsAEvrolpPSYobJoz5qFlNgU2IRKqMzK+JaslQacgEymp6lQb6qYKhHEPM4KQUJ1GaKqCE7J9qCmOSlVh9puuEyNUm9ekDAYoNCHxCHGz7TKe3FR/AcIVj+IqxtF3VgSeh0Sq0RGI2jRHx9hN1Ohl0TN+lcrnLADJLdlsXrxkmWwRSsDegktzTP18vl2hJpbe2P4K2FtwrVimrsvWdYhN7DxMiy1hCLcSxVUdNcBXMTZxWlKTL+iLtHM4phVL10fp/ifGZpPHHdzeBiPyflI0ZSXHnFjaH0UYHnAYIHixyRaihAo1BCVls6R2bbU2JmZkljCyovQYJIvPMCMSqfneP6RWjZQJPthMhIebEcKOKgCgHmDNGxCZ7eMevU/hOLVagN01y5KtGu4BEyESIzNiqSrTZd+HMSBpmla1RJJ8VxCZ+Fyr6TTImS+LUty/SGqBSjBZs2MG3gzUas6Mhe6rpVtOje1f4HyEuJMQl2VhHs2mMdSyVAK+YGdpRqK6xRjhGmW9BWItEYUAj4Bw1RFypepgKRrswJcnU9apaTo4H9lcBiOSJGQPrJnZYKTW4OyrYzIHDeOkfKPNgvn49WzQQfuRRBQBWbja4FidwUFvacl2Dx0MMUFuRJiwIX50Drt21+0dbLTA9WPz0gvngYtcHmz23K5tK4qR6d4/8p/ox2XhDWx4t/fRfdfIKIqtuEu99UE5ph2bLN8ryjLX7Le7AJfxZLS/LmNHxDY+8TTXDDIdbWdBD4I3P0E3fNi2DcXAt1MAs9s+GLS8e4vJrTZY7CCwRlobk3gZJWNk3ONvy5QtxlBWrUwVZUf6dWvZpJZuLn87dsERlAx/R9swbHtp2B+04Hdptxp0CE4QaXAwRN80jAtCRmkjIwQM8Do6+/geu10fn6xgHQGfnTHAdLbB/YFdO8PuDs8GeEFv0WHhV3XWwXowEoP50wQh/HF7338sUwj+lj7jqDBeCIpPOPnxveei0RT+np5HAKSSYe663sE0eWuAg76LgQVDQoYNYtKK6Gnu6eGPo2Uc/IxtbqA7+vH91M2A/ZBPscE/z9/IsPG3wCv2sL94w1hZj06TBifAB1faVrj9Lq75xZXHv93e/cNvR04BIHT2KJpzsQd+4MsF599vh/d7eL0UBqSMe71x7h6M0T0ZSLyKupEkkmXLYeCfiydd+yejXSOMhu7w9Pj74bd/jxzHWb4QfHUEbN+PT4eucskJrns/e+lkEQm1G6kE8I2hLGsddG1fw/GuPJ9IXXfY7p0eH9/nOj49bbfdruvatk84LgMYD1oY5W4q6BBpY+jTfpxQ8RwW4yP8udDIKfm/8vuW8BOKPdzAIuomCCEllftd/B3G7LF415zDwcQ8n1EI5XGNRu3/irGpb3fBjDdxKBxCTOcU4C7lv6lDQjYeW9mX7CNP6F6E8n21+E+y5GT3OtrcbQglhdZp26N46XtEV3/OvuYBJtj7ef/abgMitMhzsyRfP+lgxRhoQDckcAt72NKkOdqRZ6Ce7UWGuAVebtin5TkeFOPJdb2bCRYWbk44ubvrc2yPsYHXOi5O82QA2mhGtzPPU7fwTmf4tgGi6A0KsyL46dn8+kVcpkATJku225nfciO8z1kyZuCYFDDi/PK+1hrGDXRJRmbYmts01Mhm0iyIhO7m/AKN1A5WXd2GFFvpzatLJNKgm4w8MSmlO+C1yBwIz4IWpLchTBhYuZHojKTlJi6SZlgrNSzP6SDOoJuMkntCkPaN7gB3FeaQM/q4BJY0YZep9LW52LDVziSkq5gQVsmYEiMSEhZJg7T1tyl002hCHyfSgf/FtduWfYDDjJQVwYblXjINiFLa5eipQlt04+aYou5i5P6CkM3kOik0w5vRumC2KXmSYMKMfRKREJ8XNEwyocLKmmiMiZ6GmYwbdcuNkPUE1jNjsjcjdxf9JDspqC9FecYbung7eUX3mBSjHdGEpLOUvM5wTIqx1InopINuom2IpWnEnL8ebJf2tqVk7PVIfCTxgSZj9yNNRCy7E50sDEXpRSq+SctNdKDBXRo3ysIwVDRdJdlGtKG9iGJCsiEA4UYEQtyRSd5q96QU3ueHViKX2SZkG/0ogBBK/Z/niUWKnelFIWwNgx4IuV1BwjeUYSsCYfK2fn+WYthuJwLhwE16SQMp38VF07C16QY2+Ik2o6EYbpR0sY6n9BJMiMdDDFZ7h61r+v7PIcYidvHtviSF3kU8sZWEbllwsUOO9gm/4S0gGz9SdZpwQpRi90I5KR7rlsrthFelTEq7HIYQn8ZBOkMl+TbMKMNQCZGdFseEn3hAPMQXmnDQTT4fCE+dhIqkGp6jMQSYiLgTHHzBjcXfjSC3HsQneyPMSVN2d+GmIISboQjRtdcFIVwPNQ3Rsc+S3llw2WehH+DTt5O+SsOk9Nmt7WEITxO/DsWknIS0IZESfM5kXEovZGNBpLYghGH3EEUiDFd6E2koCOEwLGE58Sttntxw7VNWav3ShNgAt8RoLaB9aoVcihKGcKkVcsG0IwphtxOKEFp8cQhDPYJALMIwXT4SspuxEy9OGFjZrNT5b0kM/dcJ1wJr0qIoCvVs0Bt8+MS8hcYIM9Qs3wxgT6Qc/yDN5+WfX4nwMr8ZO8ylEeZ/JMyyh7ulSpUqVapUqVKlSpUqVapUqX5p/Q+tX2bDqWPRxgAAAABJRU5ErkJggg==" alt="Default profile image" class="profile-image">
+        {% endif %}
+        
+        <hr>
+    </div>
+{% endfor %}
+
+<h1>Image Posts</h1>
+{% for post in image_posts %}
+<div class="post">
+    <div class="user-info">
+        {% if post.author.profile_image %}
+            <img src="{{ post.author.profile_image.url }}" alt="{{ post.author.username }}'s profile image" class="profile-image">
+        {% else %}
+            <img src="data:image/png;base64,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" alt="Default profile image" class="profile-image">
+        {% endif %}
+        <strong>{{ post.author.username }}</strong>
+    </div>
+    <div>
+        <h3>{{ post.title }}</h3>
+        {% if post.video %}
+            <video width="100%" height="100%" controls>
+                <source src="{{ post.video.url }}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        {% endif %}
+        {% if post.image %}
+            <img src="{{ post.image.url }}" alt="Post image">
+        {% endif %}
+    </div>
+    <p>{{ post.content }}</p>
+    <p class="post-date">{{ post.created_at|timesince }}</p>
+    
+    <div class="like-section">
+        <p>Likes: {{ post.likes_count }}</p>
+        {% if request.user in post.likes.all %}
+            <form action="{% url 'unlike_post' post.id %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="heart-button liked">♥ {{ post.likes.count }}</button>
+            </form>
+        {% else %}
+            <form action="{% url 'like_post' post.id %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="heart-button">♡ {{ post.likes.count }}</button>
+            </form>
+        {% endif %}
+    </div>
+
+    <div class="comment-section">
+        <button class="toggle-button" onclick="toggleComments('{{ post.id }}')">Show Comments</button>
+        <div id="comments-{{ post.id }}" style="display: none;">
+            {% for comment in post.comments.all %}
+                <div class="comment">
+                    {% if comment.user.profile_image %}
+                        <img src="{{ comment.user.profile_image.url }}" alt="{{ comment.user.username }}'s profile image">
+                    {% else %}
+                        <img src="https://example.com/default-profile.png" alt="Default Profile Picture" class="profile-pic">
+                    {% endif %}
+                    <p><strong>{{ comment.user.username }}</strong>: {{ comment.content }}</p>
+                </div>
+            {% endfor %}
+            <form method="post" class="comment-form">
+                {% csrf_token %}
+                <input type="hidden" name="post_id" value="{{ post.id }}">
+                <textarea name="content" placeholder="Add a comment..." required></textarea>
+                <button type="submit">Comment</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+
+<h1>Video Posts</h1>
+{% for post in video_posts %}
+<div class="post" >
+    <div class="user-info">
+        {% if post.user.profile_image %}
+                    <img src="{{ post.user.profile_image.url }}" alt="{{ post.user.username }}'s profile image" class="user-image">
+                {% else %}
+                    <img src="https://s3.amazonaws.com/org.kellenberg.www-media/wp-content/uploads/2019/10/04112751/facebook-user-icon-19.jpg" alt="Default profile image" class="user-image">
+                {% endif %}
+        <strong>{{ post.user.username }}</strong>
+        
+    </div>
+    <div>
+        {% if post.video %}
+            <video width="100%" height="100%" controls>
+                <source src="{{ post.video.url }}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            
+            
+        {% endif %}
+    </div>
+    <p>{{ post.content }}</p>
+    {% if post.image %}
+        <img src="{{ post.image.url }}" alt="Post image">
+        <p class="post-date">{{ post.created_at }}</p>
+    {% endif %}
+    <button class="toggle-button" onclick="toggleComments('{{ post.id }}')">Show Comments</button>
+    <p>Likes: {{ post.likes.count }}</p>
+
+{% if request.user in post.likes.all %}
+    <form action="{% url 'unlike_post' post.id %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="heart-button liked">♥ {{ post.likes.count }}</button>
+    </form>
+{% else %}
+    <form action="{% url 'like_post' post.id %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="heart-button">♡ {{ post.likes.count }}</button>
+    </form>
+{% endif %}
+<p class="views">Views: {{ post.views }}</p>  <!-- Display the view count -->
+
+    <div id="comments-{{ post.id }}" class="comment-section">
+        
+        {% for comment in post.comments.all %}
+            <div class="comment">
+                {% if comment.user.profile_image %}
+                    <img src="{{ comment.user.profile_image.url }}" alt="{{ comment.user.username }}'s profile image">
+                {% else %}
+                {% if user.is_authenticated %}
+                {% if user.gender == 'M' %}
+                    <img src="https://pro2-bar-s3-cdn-cf.myportfolio.com/8ee9e0df6a57e6cb08ce8298364354c5/b4dd1698f1d995ddf6dc1caf45e69d0b5550752716af226bf5b6e140d0a48ae6175a3d2b28d2d24e_car_1x1.jpg?h=2f9a2d1908efc225350ee82423d2d7b5&url=aHR0cHM6Ly9taXItczMtY2RuLWNmLmJlaGFuY2UubmV0L3Byb2plY3RzL29yaWdpbmFsLzE5Yjg3YTI5Mjc0MzkzLjU1ZWFkMmU3MWFhNDMuanBn" alt="Profile Picture" class="profile-pic">
+                {% elif user.gender == 'F' %}
+                    <img src="https://static.wikia.nocookie.net/dexter/images/e/e9/13_Female.jpg/revision/latest?cb=20200211173357" alt="Profile Picture" class="profile-pic">
+                {% else %}
+                    <img src="https://w7.pngwing.com/pngs/1000/665/png-transparent-computer-icons-profile-s-free-angle-sphere-profile-cliparts-free.png" alt="Default Profile Picture" class="profile-pic">
+                {% endif %}
+            {% else %}
+            {% endif %}
+                {% endif %}
+                <p><strong>{{ comment.user.username }}</strong>: {{ comment.content }}</p>
+                {% if request.user in post.likes.all %}
+    <form action="{% url 'unlike_post' post.id %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="heart-button liked">♡</button>
+    </form>
+{% else %}
+    <form action="{% url 'like_post' post.id %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="heart-button">♥</button>
+    </form>
+{% endif %}
+            </div>
+        {% endfor %}
+        <form method="post" class="comment-form">
+            {% csrf_token %}
+            <input type="hidden" name="post_id" value="{{ post.id }}">
+            <textarea name="content" placeholder="Add a comment..." required></textarea>
+            <button type="submit">Comment</button>
+        </form>
+    </div>
+</div>
+{% endfor %}
+<h2>Shorts</h2>
+{% for shorts in shorts_posts %}
+    <div>
+        <video width="100%" height="1000px" controls>
+            <source src="{{ shorts.video.url }}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <p>Uploaded by {{ shorts.author.username }} on {{ shorts.created_at }}</p>
+        {% for post in posts %}
+    <p>Posted {{ post.adjusted_time|timesince }} ago</p>
+{% endfor %}
+    </div>
+{% endfor %}
+<h1>Text ! post</h1>
+    {% for text_post in posts2 %}
+        <div class="post-item">
+            
+            <!-- Display author profile picture -->
+            <div class="post-header">
+                {% if post.user.profile_image %}
+                    <img src="{{ post.user.profile_image.url }}" alt="{{ post.user.username }}'s profile image" class="user-image">
+                {% else %}
+                    <img src="https://s3.amazonaws.com/org.kellenberg.www-media/wp-content/uploads/2019/10/04112751/facebook-user-icon-19.jpg" alt="Default profile image" class="user-image">
+                {% endif %}
+                <div class="author-info">
+                    <h3>{{ post.author.username }}</h3>
+                    <span class="timestamp">{{ post.created_at|timesince }} ago</span>
+                </div>
+            </div>
+    {% endfor %}
+</body>
+</html>

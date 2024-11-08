@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Text Post</title>
+</head>
+<body>
+    <h1>Create a New Text Post</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <textarea name="content" required></textarea>
+        <button type="submit">Create Post</button>
+    </form>
+    <a href="{% url 'home' %}">Back to Home</a>  <!-- Link back to home page -->
+</body>
+</html>
