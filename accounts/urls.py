@@ -11,7 +11,7 @@ from .views import like_text_post, unlike_text_post
 from .views import toggle_like_text_post, add_comment, toggle_like_image_post # Import the view
 
 urlpatterns = [
-    path('', views.home, name='home'),
+    path('', views.index, name='index'),
     path('register/', register, name='register'),
     path('login/', login_view, name='login'),
     path('home/', home, name='home'),
