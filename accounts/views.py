@@ -51,11 +51,10 @@ from .forms import CommentForm3, CommentForm4, CommentForm5
 from django.contrib import messages
 from .models import FriendRequest
 from django.urls import reverse
-
 from django.http import HttpResponse
 
 def index(request):
-    return HttpResponse('Hello, world!')
+    return HttpResponse("Главная страница без статики")
 
 @login_required
 def inbox(request):
