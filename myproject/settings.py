@@ -25,7 +25,7 @@ SECRET_KEY = 'Nothing'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['your-project-name.vercel.app']
+ALLOWED_HOSTS = ['network-two-flax.vercel.app']
 
 # Application definition
 
