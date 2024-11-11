@@ -1,4 +1,5 @@
 {
+    "version": 2,
     "builds": [
       {
         "src": "myproject/wsgi.py",
@@ -6,17 +7,11 @@
       }
     ],
     "env": {
-      "DJANGO_SETTINGS_MODULE": "myproject.settings"
-    },
-    "routes": [
-      {
-        "src": "/static/(.*)",
-        "dest": "/static/$1"
-      },
-      {
-        "src": "/(.*)",
-        "dest": "myproject/wsgi.py"
-      }
-    ]
+      "DJANGO_SECRET_KEY": "@django-secret-key",
+      "DB_NAME": "@db-name",
+      "DB_USER": "@db-user",
+      "DB_PASSWORD": "@db-password",
+      "DB_HOST": "@db-host"
+    }
   }
   
