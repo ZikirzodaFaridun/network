@@ -118,7 +118,6 @@ property-manager==3.0
 proto-plus==1.24.0
 protobuf==4.25.3
 psycopg2==2.9.10
-psycopg2-binary==2.9.10
 pyasn1==0.6.0
 pyasn1_modules==0.4.0
 PyAutoGUI==0.9.54
