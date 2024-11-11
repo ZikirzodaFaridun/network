@@ -54,7 +54,7 @@ from django.urls import reverse
 from django.http import HttpResponse
 
 def index(request):
-    return HttpResponse("Главная страница без статики")
+    return render("accounts/index.html)
 
 @login_required
 def inbox(request):
