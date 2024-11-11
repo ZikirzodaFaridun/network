@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
-import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,12 +20,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'Nothing'
+SECRET_KEY = 'django-insecure-a=7v8g=qanl113#gt8fbl1gke$$@caetzg4aygp_pwz=1$#i9p'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['.vercel.app']
+ALLOWED_HOSTS = []
+
 
 # Application definition
 
@@ -76,12 +76,8 @@ WSGI_APPLICATION = 'myproject.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.getenv('DB_NAME'),  # Name of your database
-        'USER': os.getenv('DB_USER'),  # Database username
-        'PASSWORD': os.getenv('DB_PASSWORD'),  # Database password
-        'HOST': os.getenv('DB_HOST', 'localhost'),  # Database host, 'localhost' by default
-        'PORT': os.getenv('DB_PORT', '5432'),  # Default PostgreSQL port
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
@@ -120,7 +116,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = 'static/'
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
 # Add these lines for media files
