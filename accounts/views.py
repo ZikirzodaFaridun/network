@@ -54,7 +54,7 @@ from django.urls import reverse
 from django.http import HttpResponse
 
 def index(request):
-    return render("accounts/index.html)
+    return render(request, 'accounts/index.html')
 
 @login_required
 def inbox(request):
